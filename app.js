@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var db_dir = process.env.MONGODB_URI;
 
 const cors = require('cors');
 
@@ -15,7 +16,7 @@ mongoose.Promise = global.Promise;
 //  .then(() =>  console.log('connection successful'))
 //  .catch((err) => console.error(err));
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/viajes', {useMongoClient: true})
+mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGODB_URI || 'mongodb://localhost/viajes', {useMongoClient: true})
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
 
