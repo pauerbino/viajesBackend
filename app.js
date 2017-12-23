@@ -31,6 +31,11 @@ var register = require('./routes/register');
 var vuelos = require('./routes/vuelos');
 var app = express();
 app.use(cors());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.use(passport.initialize());
 // app.use(logger('dev'));
