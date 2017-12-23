@@ -17,16 +17,19 @@ router.get('/:fecha/:origen/:destino/:aerolineaId', function(req, res, next) {
 			console.log(vuelo);
 			vueloEnCiudadOrigen = false;
 			vueloEnCiudadDestino = false;
-			vueloDisponible = false;
+			vueloDisponible = true;
 			vueloEnFecha = false;
-			if (vuelo.ciudadOrigen._id === req.params.origen) {
+			if (vuelo.ciudadOrigen._id == req.params.origen) {
 				vueloEnCiudadOrigen = true;
 			}
-			if (vuelo.ciudadDestino._id === req.params.destino) {
+			if (vuelo.ciudadDestino._id == req.params.destino) {
 				vueloEnCiudadDestino = true;
 			}
 			if (vuelo.fechaSalida >= fechaComienzo && vuelo.fechaSalida <= fechaFin) {
 				vueloEnFecha = true;
+			}
+			if (vuelo.cantPasajerosDisp == 0) {
+				vueloDisponible = false;
 			}
 			if (req.params.aerolineaId != "99") {
 				if (vuelo.aerolinea._id != req.params.aerolinea) {
