@@ -6,18 +6,29 @@ var Hotel = require('../model/hotelModel.js');
 
 
 router.get('/:destino/:estrellas', function(req, res, next) {
-    if (req.params.estrellas === "99") {
-    	Hotel.find({"ciudad": req.params.destino, "cantidadHabitacionesDisponibles": {$gt: 0}}).exec(function (err, response) {
-        	if (err) return next(err);
-        	res.json(response);
-    	});
-    }
-    else{ 
-    	Hotel.find({"estrellas": req.params.estrellas, "ciudad": req.params.destino, "cantidadHabitacionesDisponibles": {$gt: 0}}).exec(function (err, response) {
-	        if (err) return next(err);
-	        res.json(response);
-	    });
-    }
+	var responseHoteles = [];
+	Hotel.find().exec(function(err, rta) {
+		if(err) return next(err);
+        for(var hotel of rta) {
+            hotelEnCiudad = false;
+            hotelDisponible = false;
+            if (hotel.ciudad == req.params.destino) {
+				hotelEnCiudad = true;
+			}
+			if (hotel.cantidadHabitacionesDisponibles > 0) {
+				hotelDisponible = true;
+            }
+			if (req.params.estrellas != "99") {
+				if (hotel.estrellas != req.params.estrellas) {
+					hotelDisponible = false;
+				}
+			}
+			if (hotelEnCiudad && hotelDisponible) {
+				responseHoteles.push(hotel);
+			}
+		}
+		res.json(responseHoteles);
+	});
 });
 
 router.get('/', function(req, res, next) {

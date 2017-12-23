@@ -8,7 +8,7 @@ var HotelSchema = Schema({
     cantidadHabitacionesDisponibles : {type : Number, default: 0},
     cantidadHabitaciones : {type : Number, default: 0},
     monto : {type : Number, default: 0},
-    ciudad : [{ type: Schema.Types.ObjectId, ref: 'Ciudad' }],
+    ciudad : { type: Schema.Types.ObjectId, ref: 'Ciudad' },
     url: {type : String, default: ''}
 });
 
