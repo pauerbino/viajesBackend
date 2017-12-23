@@ -20,6 +20,13 @@ router.get('/:destino/:estrellas', function(req, res, next) {
     }
 });
 
+router.get('/', function(req, res, next) {
+    Hotel.find(function (err, response) {
+        if (err) return next(err);
+        res.json(response);
+    });
+});
+
 // router.get('/:id', function(req, res, next) {
 //     List.findById(req.params.id).populate('contacts').exec(function(err, list) {
 //         if (err) return next(err);
