@@ -10,21 +10,34 @@ router.get('/:fecha/:origen/:destino/:aerolineaId', function(req, res, next) {
     fechaFin = new Date(partesFecha[2],partesFecha[1]-1,partesFecha[0]);
     fechaFin.setDate(fechaFin.getDate() + 1);
     console.log(req.params.aerolineaId);
-    if (req.params.aerolineaId == "99") {
-        console.log("No hay aerolinea definida");
-     Vuelo.find({fechaSalida: {$gt: fechaComienzo, $lt:fechaFin}, cantPasajerosDisp: {$gt: 0}}, {"ciudadOrigen": req.params.origen}, {"ciudadDestino": req.params.destino}).populate('aerolinea ciudadOrigen ciudadDestino').select('fechaSalida fechaLlegada cantPasajerosDisp cantPasajeros precio').exec(function (err, response) {
-         if (err) return next(err);
-         res.json(response);
-     })
-    }
-    else {
-     Vuelo.find({fechaSalida: {$gt: fechaComienzo, $lt:fechaFin}, cantPasajerosDisp: {$gt: 0}, aerolinea : req.params.aerolineaId}, {"ciudadOrigen": req.params.origen}, {"ciudadDestino": req.params.destino}).populate('aerolinea ciudadOrigen ciudadDestino').select('fechaSalida fechaLlegada cantPasajerosDisp cantPasajeros precio').exec(function (err, response) {
-        console.log("Se recibio aeroloinea");
-        console.log(req.params.aerolineaId);
+	var responseVuelos = [];
+	Vuelo.find().populate('aerolinea ciudadOrigen ciudadDestino').exec(function (err, response) {
         if (err) return next(err);
-        res.json(response);
+        for(var vuelo of rta) {
+			vueloEnCiudadOrigen = false;
+			vueloEnCiudadOrigen = false;
+			vueloDisponible = false;
+			vueloEnFecha = false;
+			if (vuelo.ciudadOrigen._id == req.params.origen) {
+				vueloEnCiudadOrigen = true;
+			}
+			if (vuelo.ciudadDestino._id == req.params.destino) {
+				vueloEnCiudadDestino = true;
+			}
+			if (fechaComienzo >= vuelo.fechaComienzo && fechaFin <= vuelo.fechaFin) {
+				vueloEnFecha = true;
+			}
+			if (req.params.aerolineaId != "99") {
+				if (vuelo.aerolinea._id != req.params.aerolinea) {
+					vueloDisponible = false;
+				}
+			}
+			if (vueloEnCiudadOrigen && vueloEnCiudadDestino && vueloEnFecha && vueloDisponible) {
+				responseVuelos.push(vuelo);
+			}
+		}
+		res.json(responseVuelos);
     });
-    }
 });
 
 // router.get('/:id', function(req, res, next) {
