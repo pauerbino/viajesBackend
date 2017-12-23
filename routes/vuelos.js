@@ -14,18 +14,18 @@ router.get('/:fecha/:origen/:destino/:aerolineaId', function(req, res, next) {
 	Vuelo.find().populate('aerolinea ciudadOrigen ciudadDestino').exec(function (err, response) {
         if (err) return next(err);
         for(var vuelo of response) {
-					console.log(vuelo);
+			console.log(vuelo);
 			vueloEnCiudadOrigen = false;
-			vueloEnCiudadOrigen = false;
+			vueloEnCiudadDestino = false;
 			vueloDisponible = false;
 			vueloEnFecha = false;
-			if (vuelo.ciudadOrigen._id == req.params.origen) {
+			if (vuelo.ciudadOrigen._id === req.params.origen) {
 				vueloEnCiudadOrigen = true;
 			}
-			if (vuelo.ciudadDestino._id == req.params.destino) {
+			if (vuelo.ciudadDestino._id === req.params.destino) {
 				vueloEnCiudadDestino = true;
 			}
-			if (fechaComienzo >= vuelo.fechaComienzo && fechaFin <= vuelo.fechaFin) {
+			if (vuelo.fechaSalida >= fechaComienzo && vuelo.fechaSalida <= fechaFin) {
 				vueloEnFecha = true;
 			}
 			if (req.params.aerolineaId != "99") {
