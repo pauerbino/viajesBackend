@@ -32,8 +32,9 @@ router.get('/:fecha/:origen/:destino/:aerolineaId', function(req, res, next) {
 				vueloDisponible = false;
 			}
 			if (req.params.aerolineaId != "99") {
-				if (vuelo.aerolinea._id != req.params.aerolinea) {
-					vueloDisponible = false;
+				vueloDisponible = false;
+				if (vuelo.aerolinea._id == req.params.aerolineaId) {
+					vueloDisponible = true;
 				}
 			}
 			if (vueloEnCiudadOrigen && vueloEnCiudadDestino && vueloEnFecha && vueloDisponible) {
