@@ -14,6 +14,7 @@ router.get('/:fecha/:origen/:destino/:aerolineaId', function(req, res, next) {
 	Vuelo.find().populate('aerolinea ciudadOrigen ciudadDestino').exec(function (err, response) {
         if (err) return next(err);
         for(var vuelo of response) {
+					console.log(vuelo);
 			vueloEnCiudadOrigen = false;
 			vueloEnCiudadOrigen = false;
 			vueloDisponible = false;
